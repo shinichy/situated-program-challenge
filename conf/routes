@@ -1,0 +1,3 @@
+GET         /meetups            controllers.MeetupController.findAll
+GET         /meetups/:id        controllers.MeetupController.find(id: Int)
+POST        /meetups            controllers.MeetupController.create
