@@ -2,11 +2,9 @@ package controllers
 
 import io.circe.generic.auto._
 import io.circe.syntax._
-import models.Meetups
+import models.{Meetup, Meetups}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-
-case class JsonMeetup(title: String)
 
 class MeetupController(cc: ControllerComponents) extends AbstractController(cc) with Circe {
 
@@ -18,8 +16,8 @@ class MeetupController(cc: ControllerComponents) extends AbstractController(cc) 
     Meetups.find(id).fold(NotFound(""))(meetup => Ok(meetup.asJson))
   }
 
-  def create() = Action(circe.json[JsonMeetup]) { request =>
-    Meetups.create(request.body.title)
+  def create() = Action(circe.json[Meetup]) { request =>
+    Meetups.create(request.body)
     Ok("ok")
   }
 }

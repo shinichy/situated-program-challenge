@@ -6,16 +6,16 @@ import play.filters.HttpFiltersComponents
 import router.Routes
 
 class AppApplicationLoader extends ApplicationLoader {
-  def load(context: Context) = new AppComponents(context).application
+
+  def load(context: Context) = {
+    LoggerConfigurator(context.environment.classLoader).foreach {
+      _.configure(context.environment)
+    }
+    (new BuiltInComponentsFromContext(context) with AppComponents).application
+  }
 }
 
-class AppComponents(context: Context) extends BuiltInComponentsFromContext(context)
-  with MeetupModule
-  with HttpFiltersComponents {
-
-  LoggerConfigurator(context.environment.classLoader).foreach {
-    _.configure(context.environment)
-  }
-
+trait AppComponents extends HttpFiltersComponents with AppModule {
+  lazy val prefix: String = "/"
   lazy val router: Router = wire[Routes]
 }

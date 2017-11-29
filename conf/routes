@@ -1,3 +1,6 @@
+GET         /members            controllers.MemberController.findAll
+GET         /members/:id        controllers.MemberController.find(id: Int)
+POST        /members            controllers.MemberController.create
 GET         /meetups            controllers.MeetupController.findAll
 GET         /meetups/:id        controllers.MeetupController.find(id: Int)
 POST        /meetups            controllers.MeetupController.create
