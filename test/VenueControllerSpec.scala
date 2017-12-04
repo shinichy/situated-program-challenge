@@ -31,6 +31,8 @@ class VenueControllerSpec extends PlaySpec
       status(result) mustEqual OK
       val responseJson = contentAsJson(result)
       responseJson.as[JsArray].value.size mustEqual 2
+
+      (responseJson(0) \ "group-id").isEmpty mustEqual true
     }
   }
 
@@ -65,6 +67,7 @@ class VenueControllerSpec extends PlaySpec
       status(result) mustEqual OK
       val responseJson = contentAsJson(result)
       (responseJson \ "venue-id").as[Int] must be > 0
+      (responseJson \ "group-id").isEmpty mustEqual true
       (responseJson \ "venue-name").as[String] mustEqual name
       (responseJson \ "address" \ "postal-code").as[String] mustEqual postalCode
       (responseJson \ "address" \ "prefecture").as[String] mustEqual prefecture
