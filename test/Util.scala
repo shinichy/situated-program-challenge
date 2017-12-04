@@ -35,7 +35,7 @@ trait Util { self: BaseOneAppPerTest =>
     (responseJson \ "group-id").as[Int]
   }
 
-  def createVenue(groupId: Int, name: String, postalCode: String, prefecture: String, city: String, address1: String, address2: String, building: String) = {
+  def createVenue(groupId: Int, name: String, postalCode: String, prefecture: String, city: String, address1: String, address2: String) = {
     val json = Json.parse(
       s"""
          |{
@@ -45,8 +45,7 @@ trait Util { self: BaseOneAppPerTest =>
          |    "prefecture": "$prefecture",
          |    "city": "$city",
          |    "address1": "$address1",
-         |    "address2": "$address2",
-         |    "building": "$building"
+         |    "address2": "$address2"
          |  }
          |}
       """.stripMargin)

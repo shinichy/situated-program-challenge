@@ -24,8 +24,8 @@ class VenueControllerSpec extends PlaySpec
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)
-      createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
-      createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
+      createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
+      createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
 
       val Some(result) = route(app, FakeRequest(GET, s"/groups/$groupId/venues"))
       status(result) mustEqual OK
@@ -47,7 +47,6 @@ class VenueControllerSpec extends PlaySpec
       val city = "Nakano"
       val address1 = "中野4丁目"
       val address2 = "10-1"
-      val building = "NAKANO CENTRAL PARK EAST"
 
       val json = Json.parse(
         s"""
@@ -58,8 +57,7 @@ class VenueControllerSpec extends PlaySpec
            |    "prefecture": "$prefecture",
            |    "city": "$city",
            |    "address1": "$address1",
-           |    "address2": "$address2",
-           |    "building": "$building"
+           |    "address2": "$address2"
            |  }
            |}
       """.stripMargin)
@@ -74,7 +72,6 @@ class VenueControllerSpec extends PlaySpec
       (responseJson \ "address" \ "city").as[String] mustEqual city
       (responseJson \ "address" \ "address1").as[String] mustEqual address1
       (responseJson \ "address" \ "address2").as[String] mustEqual address2
-      (responseJson \ "address" \ "building").as[String] mustEqual building
     }
   }
 }

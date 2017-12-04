@@ -9,8 +9,7 @@ case class Address(postalCode: String,
                    prefecture: String,
                    city: String,
                    @JsonKey("address1") street1: String,
-                   @JsonKey("address2") street2: String,
-                   building: String = "") extends Embedded
+                   @JsonKey("address2") street2: String) extends Embedded
 
 @ConfiguredJsonCodec
 case class Venue(@JsonKey("venue-id") id: Int = Int.MinValue,

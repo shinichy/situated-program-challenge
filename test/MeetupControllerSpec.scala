@@ -24,7 +24,7 @@ class MeetupControllerSpec extends PlaySpec
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)
-      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
+      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
       createMeetup(groupId, "Situated Progarm Challenge", "2017-12-04T07:31:34.248Z", "2017-12-04T09:31:34.248Z", venueId)
       createMeetup(groupId, "Situated Progarm Challenge2", "2017-12-04T07:31:34.248Z", "2017-12-04T09:31:34.248Z", venueId)
 
@@ -41,7 +41,7 @@ class MeetupControllerSpec extends PlaySpec
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)
-      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
+      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
 
       val title = "Situated Progarm Challenge"
       val startAt = "2017-12-04T07:31:34.248Z"
@@ -66,7 +66,7 @@ class MeetupControllerSpec extends PlaySpec
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)
-      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
+      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
 
       val title = "Situated Progarm Challenge"
       val startAt = "2017-12-04T07:31:34.248Z"
@@ -102,7 +102,7 @@ class MeetupControllerSpec extends PlaySpec
       val email = "s@test.com"
       val memberId = createMember(firstName, lastName, email)
       val groupId = createGroup(memberId)
-      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1", "NAKANO CENTRAL PARK EAST")
+      val venueId = createVenue(groupId, "ICTCO", "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
       val eventId = createMeetup(groupId, "Situated Progarm Challenge", "2017-12-04T07:31:34.248Z", "2017-12-04T09:31:34.248Z", venueId)
 
       val Some(result) = route(app, FakeRequest(POST, s"/members/$memberId/meetups/$eventId"))
