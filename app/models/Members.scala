@@ -1,26 +1,22 @@
 package models
 
 import io.circe.generic.extras._
+import db.DbContext
 
 @ConfiguredJsonCodec
 case class Member(@JsonKey("member-id") id: Int = Int.MinValue,
                   firstName: String,
                   lastName: String,
-                  email: String) extends JsonConfig
+                  email: String)
 
-object Member extends JsonConfig
-
-object Members extends PostgresContext {
-
+class Members(val ctx: DbContext) {
   import ctx._
 
-  implicit val MemberInsertMeta = insertMeta[Member](_.id)
+  val members = quote(querySchema[Member]("members"))
 
-  val Members = quote(querySchema[Member]("members"))
+  def findAll() = run(members)
 
-  def findAll() = run(Members)
+  def find(id: Int) = run(members.filter(_.id == lift(id))).headOption
 
-  def find(id: Int) = run(Members.filter(_.id == lift(id))).headOption
-
-  def create(member: Member) = run(quote(Members.insert(lift(member)).returning(_.id)))
+  def create(member: Member) = run(quote(members.insert(lift(member)).returning(_.id)))
 }

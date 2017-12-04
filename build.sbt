@@ -9,6 +9,7 @@ scalaVersion := "2.12.4"
 val circeVersion = "0.8.0"
 
 libraryDependencies ++= Seq(
+  jdbc,
   "org.postgresql" % "postgresql" % "42.1.4",
   "io.getquill" %% "quill-jdbc" % "2.3.0",
   "com.dripower" %% "play-circe" % "2608.5",
@@ -19,3 +20,5 @@ libraryDependencies ++= Seq(
 
 resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
+javaOptions in Compile += "-Dquill.macro.log=false"

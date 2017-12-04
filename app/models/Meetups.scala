@@ -2,6 +2,7 @@ package models
 
 import java.time.LocalDateTime
 
+import db.DbContext
 import io.circe.generic.extras._
 import io.circe.java8.time._
 
@@ -12,12 +13,8 @@ case class Meetup(@JsonKey("event-id") id: Int = Int.MinValue,
                   endAt: LocalDateTime,
                   venueId: Int)
 
-object Meetup extends JsonConfig
-
-object Meetups extends PostgresContext {
+class Meetups(val ctx: DbContext) {
   import ctx._
-
-  implicit val meetupInsertMeta = insertMeta[Meetup](_.id)
 
   val meetups = quote(querySchema[Meetup]("meetups"))
 
