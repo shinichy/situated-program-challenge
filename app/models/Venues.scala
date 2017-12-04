@@ -24,7 +24,9 @@ class Venues(val ctx: DbContext) {
 
   val venues = quote(querySchema[Venue]("venues"))
 
-  def findAll(id: Int) = run(venues.filter(_.groupId == lift(id)))
+  def findAll(groupId: Int) = run(venues.filter(_.groupId == lift(groupId)))
+
+  def find(venueId: Int) = run(venues.filter(_.id == lift(venueId))).headOption
 
   def create(venue: Venue): Int = {
     run(venues.insert(lift(venue)).returning(_.id))

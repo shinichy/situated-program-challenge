@@ -1,13 +1,18 @@
-GET         /groups                                   controllers.GroupController.findAll
-POST        /groups                                   controllers.GroupController.create
-GET         /groups/:groupId/venues                   controllers.VenueController.findAll(groupId: Int)
-POST        /groups/:groupId/venues                   controllers.VenueController.create(groupId: Int)
+# Meetups
+GET         /groups/:groupId/meetups                  controllers.MeetupController.findAll(groupId: Int)
+GET         /groups/:groupId/meetups/:eventId         controllers.MeetupController.find(groupId: Int, eventId: Int)
+POST        /groups/:groupId/meetups                  controllers.MeetupController.create(groupId: Int)
 
+# Members
 GET         /members                                  controllers.MemberController.findAll
 GET         /members/:id                              controllers.MemberController.find(id: Int)
 POST        /members                                  controllers.MemberController.create
 POST        /members/:memberId/groups/:groupId        controllers.GroupController.join(groupId: Int, memberId: Int)
 
-GET         /meetups                                  controllers.MeetupController.findAll
-GET         /meetups/:id                              controllers.MeetupController.find(id: Int)
-POST        /meetups                                  controllers.MeetupController.create
+# Venues
+GET         /groups/:groupId/venues                   controllers.VenueController.findAll(groupId: Int)
+POST        /groups/:groupId/venues                   controllers.VenueController.create(groupId: Int)
+
+# Groups
+GET         /groups                                   controllers.GroupController.findAll
+POST        /groups                                   controllers.GroupController.create

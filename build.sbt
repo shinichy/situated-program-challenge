@@ -11,7 +11,7 @@ val circeVersion = "0.8.0"
 libraryDependencies ++= Seq(
   jdbc,
   "org.postgresql" % "postgresql" % "42.1.4",
-  "io.getquill" %% "quill-jdbc" % "2.3.0",
+  "io.getquill" %% "quill-jdbc" % "2.3.1",
   "com.dripower" %% "play-circe" % "2608.5",
   "io.circe" %% "circe-java8" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,

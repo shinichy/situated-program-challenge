@@ -20,7 +20,7 @@ class VenueControllerSpec extends PlaySpec
     ctx.run(q)
   }
 
-  "GET /venues" should {
+  "GET /groups/{group-id}/venues" should {
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)
@@ -36,7 +36,7 @@ class VenueControllerSpec extends PlaySpec
     }
   }
 
-  "POST /venues" should {
+  "POST /groups/{group-id}/venues" should {
     "return OK" in {
       val memberId = createMember("Shinichi", "Katayama", "s@test.com")
       val groupId = createGroup(memberId)

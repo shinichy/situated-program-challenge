@@ -1,10 +1,10 @@
 package models
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 import db.DbContext
 
-case class Group(id: Int, name: String, createdAt: LocalDateTime)
+case class Group(id: Int, name: String, createdAt: ZonedDateTime)
 
 class Groups(val ctx: DbContext) {
 
@@ -29,7 +29,7 @@ class Groups(val ctx: DbContext) {
   def find(id: Int) = run(groups.filter(_.id == lift(id))).headOption
 
   def create(name: String): Int = {
-    val group = Group(-1, name, LocalDateTime.now)
+    val group = Group(-1, name, ZonedDateTime.now)
     run(groups.insert(lift(group)).returning(_.id))
   }
 }

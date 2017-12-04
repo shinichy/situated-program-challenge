@@ -54,4 +54,19 @@ trait Util { self: BaseOneAppPerTest =>
     val responseJson = contentAsJson(result)
     (responseJson \ "venue-id").as[Int]
   }
+
+  def createMeetup(groupId: Int, title: String, startAt: String, endAt: String, venueId: Int) = {
+    val json = Json.parse(
+      s"""
+         |{
+         |  "title": "$title",
+         |  "start-at": "$startAt",
+         |  "end-at": "$endAt",
+         |  "venue-id": $venueId
+         |}
+      """.stripMargin)
+    val Some(result) = route(app, FakeRequest(POST, s"/groups/$groupId/meetups").withJsonBody(json))
+    val responseJson = contentAsJson(result)
+    (responseJson \ "event-id").as[Int]
+  }
 }
