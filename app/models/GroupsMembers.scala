@@ -14,10 +14,10 @@ class GroupsMembers(val ctx: DbContext) {
     run(groupsMembers.insert(lift(GroupsMember(groupId, memberId))))
   }
 
-  def find(id: Int) = {
+  def find(groupId: Int) = {
     val q = quote {
       for {
-        gm <- groupsMembers if gm.groupId == lift(id)
+        gm <- groupsMembers if gm.groupId == lift(groupId)
         m <- members if m.id == gm.memberId
       } yield m
     }

@@ -11,7 +11,7 @@ import play.api.mvc._
 class GroupController(cc: ControllerComponents,
                       memberService: Members,
                       groupService: Groups,
-                      groupsMemerService: GroupsMembers,
+                      groupsMembersService: GroupsMembers,
                       ctx: DbContext) extends AbstractController(cc) with Circe {
 
   def findAll() = Action {
@@ -26,7 +26,7 @@ class GroupController(cc: ControllerComponents,
       val groupId = groupService.create(groupName)
 
       adminMemberIds foreach {
-        groupsMemerService.create(groupId, _)
+        groupsMembersService.create(groupId, _)
       }
 
       val adminMembers = adminMemberIds flatMap memberService.find
@@ -39,10 +39,10 @@ class GroupController(cc: ControllerComponents,
     val isAdmin = request.body.admin
 
     ctx.transaction {
-      groupsMemerService.create(groupId, memberId)
+      groupsMembersService.create(groupId, memberId)
 
       val Some(group) = groupService.find(groupId)
-      val adminMembers = groupsMemerService.find(groupId)
+      val adminMembers = groupsMembersService.find(groupId)
 
       Ok(GroupResponse(groupId, group.name, adminMembers).asJson)
     }

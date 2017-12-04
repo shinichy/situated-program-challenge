@@ -21,7 +21,7 @@ class Meetups(val ctx: DbContext) {
 
   def findAll(groupId: Int) = run(meetups.filter(_.groupId == lift(groupId)))
 
-  def find(groupId: Int, eventId: Int) = run(meetups.filter(m => m.id == lift(eventId) && m.groupId == lift(groupId))).headOption
+  def find(eventId: Int) = run(meetups.filter(m => m.id == lift(eventId))).headOption
 
   def create(meetup: Meetup) = run(quote(meetups.insert(lift(meetup)).returning(_.id)))
 }

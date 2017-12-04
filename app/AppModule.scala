@@ -5,7 +5,7 @@ import com.softwaremill.macwire._
 import controllers.{GroupController, MeetupController, MemberController, VenueController}
 import db.DbContext
 import io.getquill.{PostgresJdbcContext, SnakeCase}
-import models.{Groups, GroupsMembers, Meetups, Members, Venues}
+import models.{Groups, GroupsMembers, Meetups, MeetupsMembers, Members, Venues}
 import play.api.db.{DBComponents, HikariCPComponents}
 import play.api.mvc.ControllerComponents
 
@@ -23,6 +23,7 @@ trait AppModule extends DBComponents with HikariCPComponents {
   lazy val groups = wire[Groups]
   lazy val groupsMembers = wire[GroupsMembers]
   lazy val meetups = wire[Meetups]
+  lazy val meetupsMembers = wire[MeetupsMembers]
   lazy val members = wire[Members]
   lazy val venues = wire[Venues]
   lazy val groupController = wire[GroupController]
