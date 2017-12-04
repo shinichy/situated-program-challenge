@@ -34,4 +34,24 @@ trait Util { self: BaseOneAppPerTest =>
     val responseJson = contentAsJson(result)
     (responseJson \ "group-id").as[Int]
   }
+
+  def createVenue(groupId: Int, name: String, postalCode: String, prefecture: String, city: String, address1: String, address2: String, building: String) = {
+    val json = Json.parse(
+      s"""
+         |{
+         |  "venue-name": "$name",
+         |  "address": {
+         |    "postal-code": "$postalCode",
+         |    "prefecture": "$prefecture",
+         |    "city": "$city",
+         |    "address1": "$address1",
+         |    "address2": "$address2",
+         |    "building": "$building"
+         |  }
+         |}
+      """.stripMargin)
+    val Some(result) = route(app, FakeRequest(POST, s"/groups/$groupId/venues").withJsonBody(json))
+    val responseJson = contentAsJson(result)
+    (responseJson \ "venue-id").as[Int]
+  }
 }

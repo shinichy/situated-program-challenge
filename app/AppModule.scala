@@ -2,10 +2,10 @@ import java.io.Closeable
 import javax.sql.DataSource
 
 import com.softwaremill.macwire._
-import controllers.{GroupController, MeetupController, MemberController}
+import controllers.{GroupController, MeetupController, MemberController, VenueController}
 import db.DbContext
 import io.getquill.{PostgresJdbcContext, SnakeCase}
-import models.{Groups, GroupsMembers, Meetups, Members}
+import models.{Groups, GroupsMembers, Meetups, Members, Venues}
 import play.api.db.{DBComponents, HikariCPComponents}
 import play.api.mvc.ControllerComponents
 
@@ -24,9 +24,11 @@ trait AppModule extends DBComponents with HikariCPComponents {
   lazy val groupsMembers = wire[GroupsMembers]
   lazy val meetups = wire[Meetups]
   lazy val members = wire[Members]
+  lazy val venues = wire[Venues]
   lazy val groupController = wire[GroupController]
   lazy val meetupController = wire[MeetupController]
   lazy val memberController = wire[MemberController]
+  lazy val venueController = wire[VenueController]
 
   def controllerComponents: ControllerComponents
 }

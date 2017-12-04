@@ -1,5 +1,7 @@
 GET         /groups                                   controllers.GroupController.findAll
 POST        /groups                                   controllers.GroupController.create
+GET         /groups/:groupId/venues                   controllers.VenueController.findAll(groupId: Int)
+POST        /groups/:groupId/venues                   controllers.VenueController.create(groupId: Int)
 
 GET         /members                                  controllers.MemberController.findAll
 GET         /members/:id                              controllers.MemberController.find(id: Int)
