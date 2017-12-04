@@ -1,10 +1,11 @@
-GET         /groups             controllers.GroupController.findAll
-POST        /groups             controllers.GroupController.create
+GET         /groups                                   controllers.GroupController.findAll
+POST        /groups                                   controllers.GroupController.create
 
-GET         /members            controllers.MemberController.findAll
-GET         /members/:id        controllers.MemberController.find(id: Int)
-POST        /members            controllers.MemberController.create
+GET         /members                                  controllers.MemberController.findAll
+GET         /members/:id                              controllers.MemberController.find(id: Int)
+POST        /members                                  controllers.MemberController.create
+POST        /members/:memberId/groups/:groupId        controllers.GroupController.join(groupId: Int, memberId: Int)
 
-GET         /meetups            controllers.MeetupController.findAll
-GET         /meetups/:id        controllers.MeetupController.find(id: Int)
-POST        /meetups            controllers.MeetupController.create
+GET         /meetups                                  controllers.MeetupController.findAll
+GET         /meetups/:id                              controllers.MeetupController.find(id: Int)
+POST        /meetups                                  controllers.MeetupController.create

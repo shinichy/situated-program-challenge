@@ -26,6 +26,8 @@ class Groups(val ctx: DbContext) {
     run(q).groupBy(_._1).mapValues(_ map {_._2})
   }
 
+  def find(id: Int) = run(groups.filter(_.id == lift(id))).headOption
+
   def create(name: String): Int = {
     val group = Group(-1, name, LocalDateTime.now)
     run(groups.insert(lift(group)).returning(_.id))

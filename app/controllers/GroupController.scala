@@ -3,7 +3,7 @@ package controllers
 import db.DbContext
 import io.circe.generic.auto._
 import io.circe.syntax._
-import json.{GroupRequest, GroupResponse}
+import json.{GroupJoinRequest, GroupRequest, GroupResponse}
 import models.{Groups, GroupsMembers, Members}
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -33,6 +33,18 @@ class GroupController(cc: ControllerComponents,
 
       Ok(GroupResponse(groupId, groupName, adminMembers).asJson)
     }
+  }
 
+  def join(groupId: Int, memberId: Int) = Action(circe.json[GroupJoinRequest]) { request =>
+    val isAdmin = request.body.admin
+
+    ctx.transaction {
+      groupsMemerService.create(groupId, memberId)
+
+      val Some(group) = groupService.find(groupId)
+      val adminMembers = groupsMemerService.find(groupId)
+
+      Ok(GroupResponse(groupId, group.name, adminMembers).asJson)
+    }
   }
 }

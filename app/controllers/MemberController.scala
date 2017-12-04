@@ -18,7 +18,8 @@ class MemberController(cc: ControllerComponents,
   }
 
   def create() = Action(circe.json[Member]) { request =>
-    memberService.create(request.body)
-    Ok("ok")
+    val member = request.body
+    val id = memberService.create(member)
+    Ok(member.copy(id = id).asJson)
   }
 }
