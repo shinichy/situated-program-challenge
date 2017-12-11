@@ -14,18 +14,15 @@ class GroupsMembers(val ctx: DbContext) {
     run(groupsMembers.insert(lift(GroupsMember(groupId, memberId, isAdmin))))
   }
 
-  def findAdmins(groupId: Int) = findMembersInternal(groupId, true)
-
-  def findMembers(groupId: Int) = findMembersInternal(groupId, false)
-
-  private def findMembersInternal(groupId: Int, isAdmin: Boolean) = {
+  def findMembers(groupId: Int) = {
     val q = quote {
       for {
-        gm <- groupsMembers if gm.groupId == lift(groupId) && gm.admin == lift(isAdmin)
+        gm <- groupsMembers if gm.groupId == lift(groupId)
         m <- members if m.id == gm.memberId
-      } yield m
+      } yield (gm.admin, m)
     }
 
-    run(q)
+    val membersMap = run(q).groupBy(_._1).mapValues(_ map (_._2))
+    (membersMap.getOrElse(true, Nil), membersMap.getOrElse(false, Nil))
   }
 }

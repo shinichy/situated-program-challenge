@@ -22,8 +22,7 @@ class GroupController(cc: ControllerComponents,
   }
 
   private def toGroupResponse(groupId: Int, groupName: String) = {
-    val admins = groupsMembersService.findAdmins(groupId)
-    val members = groupsMembersService.findMembers(groupId)
+    val (admins, members) = groupsMembersService.findMembers(groupId)
     val venues = venueService.findAll(groupId)
     val meetups = meetupService.findAll(groupId)
     GroupResponse(groupId, groupName, admins, venues, meetups, members)
