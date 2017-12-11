@@ -103,7 +103,6 @@ class GroupControllerSpec extends PlaySpec
 
       status(result2) mustEqual OK
       val responseJson2 = contentAsJson(result2)
-      println(responseJson2)
       val member = (responseJson2 \ "members") (0)
       (member \ "member-id").as[Int] mustEqual memberId2
       (member \ "first-name").as[String] mustEqual firstName2
