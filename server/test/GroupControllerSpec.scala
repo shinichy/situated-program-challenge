@@ -57,6 +57,10 @@ class GroupControllerSpec extends PlaySpec
       (admin2 \ "first-name").as[String] mustEqual firstName2
       (admin2 \ "last-name").as[String] mustEqual lastName2
       (admin2 \ "email").as[String] mustEqual email2
+
+      (responseJson \ "venues").isEmpty mustEqual true
+      (responseJson \ "meetups").isEmpty mustEqual true
+      (responseJson \ "members").isEmpty mustEqual true
     }
   }
 

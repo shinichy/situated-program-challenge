@@ -10,3 +10,8 @@ case class GroupResponse(groupId: Int,
                          venues: Seq[Venue],
                          meetups: Seq[Meetup],
                          members: Seq[Member])
+
+@ConfiguredJsonCodec
+case class GroupCreatedResponse(groupId: Int,
+                                groupName: String,
+                                admin: Seq[Member])
