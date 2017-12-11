@@ -42,7 +42,7 @@ object Client extends App {
     val wsClient = StandaloneAhcWSClient()
 
     try {
-      Await.ready(f(wsClient), Duration.Inf)
+      Await.result(f(wsClient), Duration.Inf)
     } catch {
       case e: Throwable => println(e.getMessage)
     } finally {
