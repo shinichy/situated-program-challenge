@@ -40,6 +40,7 @@ lazy val client = project
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "com.typesafe.play" %% "play-ahc-ws-standalone" % playWsStandaloneVersion
+      "com.typesafe.play" %% "play-ahc-ws-standalone" % playWsStandaloneVersion,
+      "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
   )
