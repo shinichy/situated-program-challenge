@@ -2,13 +2,14 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import io.circe.Json
-import io.circe.syntax._
+import io.circe.parser._
 import play.api.libs.ws.ahc._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, StandaloneWSRequest}
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.io.Source
 
 
 object Client extends App {
@@ -20,38 +21,37 @@ object Client extends App {
 
   withWsClient { wsClient =>
     args match {
-      case Array(url, method, params@_*) =>
+      case Array(url, "GET", params@_*) =>
         val paramPairs = params map { case paramRegex(key, value) => (key, value) }
-        val request = wsClient.url(url)
+        wsClient.url(url).withQueryStringParameters(paramPairs: _*).get() map printResponse
 
-        (method match {
-          case "GET" =>
-            request.withQueryStringParameters(paramPairs: _*).get()
-          case "POST" =>
-            val json = paramPairs.toMap.asJson
-            request.post(json)
-        }) map printResponse
+      case Array(url, "POST") =>
+        val str = Source.stdin.getLines().mkString
+        val json = parse(str).toTry.get
+        wsClient.url(url).post(json) map printResponse
 
-      case _ => Future.successful(println("usage: URL [GET|POST] key1=value1 key2=value2.."))
+      case _ => Future.successful(println("usage: URL GET key1=value1 key2=value2"))
     }
   }
 
   private def withWsClient(f: StandaloneAhcWSClient => Future[Unit]): Unit = {
-    implicit val system = ActorSystem()
+    implicit val system: ActorSystem = ActorSystem()
 
-    implicit val materializer = ActorMaterializer()
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     val wsClient = StandaloneAhcWSClient()
 
     try {
       Await.ready(f(wsClient), Duration.Inf)
+    } catch {
+      case e: Throwable => println(e.getMessage)
     } finally {
       wsClient.close()
       system.terminate()
     }
   }
 
-  private def printResponse(response: StandaloneWSRequest#Response) = {
+  private def printResponse(response: StandaloneWSRequest#Response): Unit = {
     if (response.status == 200) {
       println(response.body)
     } else {
