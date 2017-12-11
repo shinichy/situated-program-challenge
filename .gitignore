@@ -53,9 +53,6 @@ dist/
 # Flycheck
 flycheck_*.el
 
-# server auth directory
-/server/
-
 # projectiles files
 .projectile
 projectile-bookmarks.eld
@@ -281,3 +278,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/vim,linux,macos,scala,emacs,clojure,windows,haskell,intellij,leiningen,sublimetext
+
+target/
