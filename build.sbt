@@ -2,7 +2,6 @@ val circeVersion = "0.8.0"
 val playWsStandaloneVersion = "1.1.3"
 
 lazy val commonSettings = Seq(
-  organization := "jp.starttoday",
   version := "1.0-SNAPSHOT",
   scalaVersion := "2.12.4"
 )
