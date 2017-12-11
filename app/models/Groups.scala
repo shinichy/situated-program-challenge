@@ -14,17 +14,7 @@ class Groups(val ctx: DbContext) {
   val groupsMembers = quote(querySchema[GroupsMember]("groups_members"))
   val members = quote(querySchema[Member]("members"))
 
-  def findAll(): Map[Group, List[Member]] = {
-    val q = quote {
-      for {
-        g <- groups
-        gm <- groupsMembers if gm.groupId == g.id
-        m <- members if m.id == gm.memberId
-      } yield (g, m)
-    }
-
-    run(q).groupBy(_._1).mapValues(_ map {_._2})
-  }
+  def findAll() = run(groups)
 
   def find(id: Int) = run(groups.filter(_.id == lift(id))).headOption
 

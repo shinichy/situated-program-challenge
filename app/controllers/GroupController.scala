@@ -15,8 +15,12 @@ class GroupController(cc: ControllerComponents,
                       ctx: DbContext) extends AbstractController(cc) with Circe {
 
   def findAll() = Action {
-    val groups = groupService.findAll() map { case (group, members) => GroupResponse(group.id, group.name, members) }
-    Ok(groups.toList.sortBy(_.groupId).asJson)
+    val groups = groupService.findAll() map { group =>
+      val admins = groupsMembersService.findAdmins(group.id)
+      val members = groupsMembersService.findMembers(group.id)
+      GroupResponse(group.id, group.name, admins, members)
+    }
+    Ok(groups.sortBy(_.groupId).asJson)
   }
 
   def create() = Action(circe.json[GroupRequest]) { request =>
@@ -26,12 +30,12 @@ class GroupController(cc: ControllerComponents,
       val groupId = groupService.create(groupName)
 
       adminMemberIds foreach {
-        groupsMembersService.create(groupId, _)
+        groupsMembersService.create(groupId, _, isAdmin = true)
       }
 
-      val adminMembers = adminMemberIds flatMap memberService.find
+      val admins = adminMemberIds flatMap memberService.find
 
-      Ok(GroupResponse(groupId, groupName, adminMembers).asJson)
+      Ok(GroupResponse(groupId, groupName, admins, Nil).asJson)
     }
   }
 
@@ -39,12 +43,13 @@ class GroupController(cc: ControllerComponents,
     val isAdmin = request.body.admin
 
     ctx.transaction {
-      groupsMembersService.create(groupId, memberId)
+      groupsMembersService.create(groupId, memberId, isAdmin = false)
 
       val Some(group) = groupService.find(groupId)
-      val adminMembers = groupsMembersService.find(groupId)
+      val admins = groupsMembersService.findAdmins(groupId)
+      val members = groupsMembersService.findAdmins(groupId)
 
-      Ok(GroupResponse(groupId, group.name, adminMembers).asJson)
+      Ok(GroupResponse(groupId, group.name, admins, members).asJson)
     }
   }
 }

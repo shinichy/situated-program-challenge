@@ -3,6 +3,9 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
+
 trait Util { self: BaseOneAppPerTest =>
 
   def createMember(firstName: String, lastName: String, email: String): Int = {
@@ -19,12 +22,12 @@ trait Util { self: BaseOneAppPerTest =>
     (responseJson \ "member-id").as[Int]
   }
 
-  def createGroup(ids: Int*): Int = {
+  def createGroup(name: String, ids: Int*): Int = {
     val idsStr = ids.toSeq.map(_.toString).mkString(",")
     val json = Json.parse(
       s"""
          |{
-         |  "group-name": "clj-nakano",
+         |  "group-name": "$name",
          |  "admin-member-ids": [
          |    $idsStr
          |  ]
@@ -67,5 +70,16 @@ trait Util { self: BaseOneAppPerTest =>
     val Some(result) = route(app, FakeRequest(POST, s"/groups/$groupId/meetups").withJsonBody(json))
     val responseJson = contentAsJson(result)
     (responseJson \ "event-id").as[Int]
+  }
+
+  def joinGroup(groupId: Int, memberId: Int) = {
+    val json = Json.parse(
+      s"""
+         |{
+         |  "admin": false
+         |}
+        """.stripMargin)
+    val Some(result) = route(app, FakeRequest(POST, s"/members/$memberId/groups/$groupId").withJsonBody(json))
+    Await.ready(result, Duration.Inf)
   }
 }
