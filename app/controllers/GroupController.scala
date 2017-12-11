@@ -4,7 +4,7 @@ import db.DbContext
 import io.circe.generic.auto._
 import io.circe.syntax._
 import json.{GroupJoinRequest, GroupRequest, GroupResponse}
-import models.{Groups, GroupsMembers, Members}
+import models.{Groups, GroupsMembers, Meetups, Members, Venues}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 
@@ -12,15 +12,21 @@ class GroupController(cc: ControllerComponents,
                       memberService: Members,
                       groupService: Groups,
                       groupsMembersService: GroupsMembers,
+                      venueService: Venues,
+                      meetupService: Meetups,
                       ctx: DbContext) extends AbstractController(cc) with Circe {
 
   def findAll() = Action {
-    val groups = groupService.findAll() map { group =>
-      val admins = groupsMembersService.findAdmins(group.id)
-      val members = groupsMembersService.findMembers(group.id)
-      GroupResponse(group.id, group.name, admins, members)
-    }
+    val groups = groupService.findAll() map { g => toGroupResponse(g.id, g.name) }
     Ok(groups.sortBy(_.groupId).asJson)
+  }
+
+  private def toGroupResponse(groupId: Int, groupName: String) = {
+    val admins = groupsMembersService.findAdmins(groupId)
+    val members = groupsMembersService.findMembers(groupId)
+    val venues = venueService.findAll(groupId)
+    val meetups = meetupService.findAll(groupId)
+    GroupResponse(groupId, groupName, admins, venues, meetups, members)
   }
 
   def create() = Action(circe.json[GroupRequest]) { request =>
@@ -33,9 +39,7 @@ class GroupController(cc: ControllerComponents,
         groupsMembersService.create(groupId, _, isAdmin = true)
       }
 
-      val admins = adminMemberIds flatMap memberService.find
-
-      Ok(GroupResponse(groupId, groupName, admins, Nil).asJson)
+      Ok(toGroupResponse(groupId, groupName).asJson)
     }
   }
 
@@ -43,13 +47,11 @@ class GroupController(cc: ControllerComponents,
     val isAdmin = request.body.admin
 
     ctx.transaction {
-      groupsMembersService.create(groupId, memberId, isAdmin = false)
+      groupsMembersService.create(groupId, memberId, isAdmin = isAdmin)
 
       val Some(group) = groupService.find(groupId)
-      val admins = groupsMembersService.findAdmins(groupId)
-      val members = groupsMembersService.findAdmins(groupId)
 
-      Ok(GroupResponse(groupId, group.name, admins, members).asJson)
+      Ok(toGroupResponse(groupId, group.name).asJson)
     }
   }
 }

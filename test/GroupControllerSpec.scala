@@ -95,6 +95,11 @@ class GroupControllerSpec extends PlaySpec
       val groupId2 = createGroup(groupName2, id2)
       joinGroup(groupId1, id2)
 
+      val venueName = "ICTCO"
+      val venueId = createVenue(groupId1, venueName, "164-0001", "Tokyo", "Nakano", "中野4丁目", "10-1")
+      val title = "Situated Progarm Challenge"
+      val meetupId = createMeetup(groupId1, title, "2017-12-04T07:31:34.248Z", "2017-12-04T09:31:34.248Z", venueId)
+
       val Some(result) = route(app, FakeRequest(GET, "/groups"))
       val responseJson = contentAsJson(result)
       val group1 = responseJson(0)
@@ -105,12 +110,20 @@ class GroupControllerSpec extends PlaySpec
       (admin1 \ "first-name").as[String] mustEqual firstName1
       (admin1 \ "last-name").as[String] mustEqual lastName1
       (admin1 \ "email").as[String] mustEqual email1
-      
+
       val member1 = (group1 \ "members")(0)
       (member1 \ "member-id").as[Int] mustEqual id2
       (member1 \ "first-name").as[String] mustEqual firstName2
       (member1 \ "last-name").as[String] mustEqual lastName2
       (member1 \ "email").as[String] mustEqual email2
+
+      val venue1 = (group1 \ "venues")(0)
+      (venue1 \ "venue-id").as[Int] mustEqual venueId
+      (venue1 \ "venue-name").as[String] mustEqual venueName
+
+      val meetup1 = (group1 \ "meetups")(0)
+      (meetup1 \ "event-id").as[Int] mustEqual meetupId
+      (meetup1 \ "title").as[String] mustEqual title
 
       val group2 = responseJson(1)
       (group2 \ "group-id").as[Int] mustEqual groupId2
