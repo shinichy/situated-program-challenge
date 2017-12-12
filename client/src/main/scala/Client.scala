@@ -3,6 +3,7 @@ import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import io.circe.Json
 import io.circe.parser._
+import play.api.libs.ws.DefaultBodyWritables._
 import play.api.libs.ws.ahc._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, StandaloneWSRequest}
 
@@ -26,9 +27,17 @@ object Client extends App {
         wsClient.url(url).withQueryStringParameters(paramPairs: _*).get() map printResponse
 
       case Array(url, "POST") =>
-        val str = Source.stdin.getLines().mkString
-        val json = parse(str).toTry.get
-        wsClient.url(url).post(json) map printResponse
+        val request = wsClient.url(url)
+
+        val future = if (System.in.available() > 0) {
+          val str = Source.stdin.getLines.mkString
+          val json = parse(str).toTry.get
+          request.post(json)
+        } else {
+          request.post("")
+        }
+
+        future map printResponse
 
       case _ => Future.successful(println("usage: URL GET key1=value1 key2=value2"))
     }
