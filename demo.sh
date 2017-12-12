@@ -34,7 +34,7 @@ echo '{
   ]
 }' | java -jar ${CLIENT_JAR} "${BASE_URL}/groups" POST | jq .
 
-echo 'Shinichi joins clj-nakano with admin Kenji'
+echo 'Shinichi joins clj-nakano'
 echo '{
   "admin": false
 }' | java -jar ${CLIENT_JAR} "${BASE_URL}/members/1/groups/1" POST | jq .
@@ -65,3 +65,31 @@ echo '{
 
 echo "Get venues"
 java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/venues" GET | jq .
+
+echo 'Create a meetup situated-program-challenge #1'
+echo '{
+	"title": "situated-program-challenge #1",
+	"start-at": "2017-12-12T09:30:30.597Z",
+	"end-at": "2017-12-12T11:30:30.597Z",
+	"venue-id": 1
+}' | java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/meetups" POST | jq .
+
+echo 'Shinichi joins situated-program-challenge #1'
+java -jar ${CLIENT_JAR} "${BASE_URL}/members/1/meetups/1" POST | jq .
+
+echo 'Kenji joins situated-program-challenge #1'
+java -jar ${CLIENT_JAR} "${BASE_URL}/members/2/meetups/1" POST | jq .
+
+echo 'Create a meetup situated-program-challenge #2'
+echo '{
+	"title": "situated-program-challenge #2",
+	"start-at": "2018-01-16T09:30:30.597Z",
+	"end-at": "2018-01-16T11:30:30.597Z",
+	"venue-id": 1
+}' | java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/meetups" POST | jq .
+
+echo 'Kenji joins situated-program-challenge #2'
+java -jar ${CLIENT_JAR} "${BASE_URL}/members/2/meetups/2" POST | jq .
+
+echo "Get meetups"
+java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/meetups" GET | jq .
