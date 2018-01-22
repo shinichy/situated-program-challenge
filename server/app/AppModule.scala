@@ -2,7 +2,7 @@ import java.io.Closeable
 import javax.sql.DataSource
 
 import com.softwaremill.macwire._
-import controllers.{GroupController, MeetupController, MemberController, VenueController}
+import controllers._
 import db.DbContext
 import io.getquill.{PostgresJdbcContext, SnakeCase}
 import models.{Groups, GroupsMembers, Meetups, MeetupsMembers, Members, Venues}
@@ -30,6 +30,7 @@ trait AppModule extends DBComponents with HikariCPComponents {
   lazy val meetupController = wire[MeetupController]
   lazy val memberController = wire[MemberController]
   lazy val venueController = wire[VenueController]
+  lazy val onlineVenueController = wire[OnlineVenueController]
 
   def controllerComponents: ControllerComponents
 }

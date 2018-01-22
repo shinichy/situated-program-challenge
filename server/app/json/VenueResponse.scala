@@ -8,6 +8,6 @@ case class VenueResponse(venueId: Int, venueName: String, address: Address)
 
 object VenueResponse {
   def apply(venue: Venue): VenueResponse = {
-    VenueResponse(venue.id, venue.name, venue.address)
+    VenueResponse(venue.id, venue.name, venue.address.get)
   }
 }

@@ -11,12 +11,12 @@ class VenueController(cc: ControllerComponents,
                       venueService: Venues) extends AbstractController(cc) with Circe {
 
   def findAll(groupId: Int) = Action {
-    Ok(venueService.findAll(groupId).map(VenueResponse(_)).asJson)
+    Ok(venueService.findAllPhysical(groupId).map(VenueResponse(_)).asJson)
   }
 
   def create(groupId: Int) = Action(circe.json[Venue]) { request =>
     val venue: Venue = request.body.copy(groupId = groupId)
     val id = venueService.create(venue)
-    Ok(VenueResponse(id, venue.name, venue.address).asJson)
+    Ok(VenueResponse(id, venue.name, venue.address.get).asJson)
   }
 }

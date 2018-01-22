@@ -14,6 +14,10 @@ POST        /members/:memberId/meetups/:eventId        controllers.MeetupControl
 GET         /groups/:groupId/venues                    controllers.VenueController.findAll(groupId: Int)
 POST        /groups/:groupId/venues                    controllers.VenueController.create(groupId: Int)
 
+# Online Venues
+GET         /groups/:groupId/online-venues             controllers.OnlineVenueController.findAll(groupId: Int)
+POST        /groups/:groupId/online-venues             controllers.OnlineVenueController.create(groupId: Int)
+
 # Groups
 GET         /groups                                    controllers.GroupController.findAll
 POST        /groups                                    controllers.GroupController.create
