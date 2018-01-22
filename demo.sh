@@ -63,8 +63,17 @@ echo '{
   }
 }' | java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/venues" POST | jq .
 
+echo 'Create an online venue slack'
+echo '{
+  "venue-name": "Slack",
+  "url": "https://clj-nakano.slack.com/channels/general"
+}' | java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/online-venues" POST | jq .
+
 echo "Get venues"
 java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/venues" GET | jq .
+
+echo "Get online venues"
+java -jar ${CLIENT_JAR} "${BASE_URL}/groups/1/online-venues" GET | jq .
 
 echo 'Create a meetup situated-program-challenge #1'
 echo '{
